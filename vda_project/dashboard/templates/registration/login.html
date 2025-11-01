@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Login</title></head>
+  <body>
+    <h1>Login</h1>
+    {% if form.errors %}
+      <p style="color:red;">Username sau parolă greșite.</p>
+    {% endif %}
+    <form method="post" action="">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Autentificare</button>
+    </form>
+    <p><a href="{% url 'password_reset' %}">Ai uitat parola?</a></p>
+  </body>
+</html>
