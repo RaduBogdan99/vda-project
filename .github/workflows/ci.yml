@@ -5,9 +5,10 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # <- runner-ul GitHub; e ok, chiar dacă tu ești pe Windows
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -16,7 +17,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # fallback: dacă nu ai black/ruff în requirements.txt, fixează explicit:
+          # fallback pin, ca sa fie identic cu local
           pip install black==24.10.0 ruff==0.6.9
 
       - name: Show versions
@@ -29,7 +30,7 @@ jobs:
         run: ruff check .
 
       - name: Format check (black)
-        run: black --check .
+        run: black --check --diff .
 
       - name: Run tests
         env:

@@ -1,10 +1,13 @@
 [tool.black]
 line-length = 100
 target-version = ["py312"]
+extend-exclude = '''
+/(
+  migrations
+)/
+'''
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-fix = true
-unsafe-fixes = false
-extend-select = ["I"]
+extend-exclude = ["migrations"]
