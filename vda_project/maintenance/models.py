@@ -1,6 +1,6 @@
-
 from django.db import models
 from vehicles.models import Vehicle
+
 
 class MaintenanceRecord(models.Model):
     TYPES = [

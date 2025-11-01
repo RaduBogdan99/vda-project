@@ -1,6 +1,7 @@
 from django.db import models
 from vehicles.models import Vehicle
 
+
 class Document(models.Model):
     DOC_TYPES = [
         ("RCA", "RCA"),
@@ -18,4 +19,3 @@ class Document(models.Model):
 
     def __str__(self):
         return f"{self.vehicle} - {self.doc_type} - {self.expires_on}"
-
