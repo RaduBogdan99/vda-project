@@ -35,5 +35,5 @@ jobs:
       - name: Run tests (from manage.py folder)
        
         env:
-          DJANGO_SETTINGS_MODULE: vda_project.settings
+          DJANGO_SETTINGS_MODULE: vda_project.vda_project.settings
         run: pytest -q
