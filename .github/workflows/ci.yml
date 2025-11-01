@@ -5,7 +5,9 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest  # <- runner-ul GitHub; e ok, chiar dacă tu ești pe Windows
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SETTINGS_MODULE: vda_project.settings
     steps:
       - uses: actions/checkout@v4
 
@@ -17,7 +19,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # fallback pin, ca sa fie identic cu local
+          # pin asigurat pentru consistenta cu localul
           pip install black==24.10.0 ruff==0.6.9
 
       - name: Show versions
@@ -33,6 +35,4 @@ jobs:
         run: black --check --diff .
 
       - name: Run tests
-        env:
-          DJANGO_SETTINGS_MODULE: vda_project.settings
         run: pytest -q
