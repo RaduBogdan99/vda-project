@@ -33,7 +33,7 @@ jobs:
         run: black --check --diff .
 
       - name: Run tests (from manage.py folder)
-        working-directory: vda_project
+       
         env:
           DJANGO_SETTINGS_MODULE: vda_project.settings
         run: pytest -q
