@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ vehicle.make }} {{ vehicle.model }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 class="h2">{{ vehicle.make }} {{ vehicle.model }} ({{ vehicle.year }})</h1>
+      <p class="lead text-muted">{{ vehicle.license_plate }}</p>
+    </div>
+    <a href="{% url 'dashboard:main' %}" class="btn btn-outline-secondary">← Înapoi la Dashboard</a>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+
+  <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">Documente</h4>
+          <a href="{% url 'dashboard:document_add' vehicle_pk=vehicle.pk %}" class="btn btn-sm btn-primary">Adaugă Document</a>
+        </div>
+        <div class="card-body">
+          {% if documents %}
+            <ul class="list-group list-group-flush">
+
+{% for doc in documents %}
+  <li class="list-group-item">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ doc.get_document_type_display }}</h5>
+      <small class="text-muted">
+        {% if doc.expiry_date %}
+          Expiră la: {{ doc.expiry_date|date:"d M Y" }}
+        {% endif %}
+      </small>
+    </div>
+
+    {% if doc.notes %}
+      <p class="mb-1 text-muted">{{ doc.notes|linebreaksbr }}</p>
+    {% endif %}
+
+    <div class="mt-2">
+      {% if doc.attachment %}
+        <a href="{{ doc.attachment.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+          Vezi Atașament
+        </a>
+      {% endif %}
+
+      <a href="{% url 'dashboard:document_edit' vehicle_pk=vehicle.pk pk=doc.pk %}" class="btn btn-sm btn-outline-secondary ms-1">Editează</a>
+
+      <a href="{% url 'dashboard:document_delete' vehicle_pk=vehicle.pk pk=doc.pk %}" class="btn btn-sm btn-outline-danger ms-1">
+        Șterge
+      </a>
+    </div>
+
+  </li>
+{% endfor %}
+
+</ul>
+          {% else %}
+            <p class="text-muted">Niciun document adăugat pentru acest vehicul.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">Istoric Mentenanță</h4>
+          <a href="{% url 'dashboard:maintenance_add' vehicle_pk=vehicle.pk %}" class="btn btn-sm btn-primary">Adaugă Operațiune</a>
+        </div>
+        <div class="card-body">
+          {% if maintenance_records %}
+    <ul class="list-group list-group-flush">
+
+{% for record in maintenance_records %}
+  <li class="list-group-item">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ record.notes|truncatewords:10 }}</h5>
+      <small class="text-muted">{{ record.date|date:"d M Y" }}</small>
+    </div>
+
+    <p class="mb-1 text-muted">
+      {{ record.odometer }} km | {{ record.cost }} RON
+    </p>
+
+    <div class="mt-2">
+      {% if record.attachment %}
+        <a href="{{ record.attachment.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+          Vezi Factura
+        </a>
+      {% endif %}
+
+      <a href="{% url 'dashboard:maintenance_edit' vehicle_pk=vehicle.pk pk=record.pk %}" class="btn btn-sm btn-outline-secondary ms-1">
+        Editează
+      </a>
+
+      <a href="{% url 'dashboard:maintenance_delete' vehicle_pk=vehicle.pk pk=record.pk %}" class="btn btn-sm btn-outline-danger ms-1">
+        Șterge
+      </a>
+    </div>
+
+  </li>
+{% endfor %}
+
+</ul>
+          {% else %}
+            <p class="text-muted">Nicio operațiune de mentenanță adăugată.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h4 class="mb-0">Detalii Vehicul</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Marcă:</strong> {{ vehicle.make }}</li>
+          <li class="list-group-item"><strong>Model:</strong> {{ vehicle.model }}</li>
+          <li class="list-group-item"><strong>An:</strong> {{ vehicle.year }}</li>
+          <li class="list-group-item"><strong>Nr. înmatriculare:</strong> {{ vehicle.license_plate }}</li>
+          <li class="list-group-item"><strong>Serie șasiu (VIN):</strong> {{ vehicle.vin|default:"N/A" }}</li>
+<li class="list-group-item list-group-item-info">
+          <strong>Cost Total Mentenanță:</strong> 
+          <span class="fw-bold">{{ total_maintenance_cost }} RON</span>
+        </li>
+        </ul>
+        <div class="card-footer">
+          <a href="{% url 'dashboard:vehicle_edit' pk=vehicle.pk %}" class="btn btn-sm btn-outline-info">Editează</a>
+          <a href="{% url 'dashboard:vehicle_delete' pk=vehicle.pk %}" class="btn btn-sm btn-outline-danger float-end">Șterge Vehicul</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

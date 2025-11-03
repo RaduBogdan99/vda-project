@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Tabloul Meu de Bord - VDA{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h2">Tabloul Meu de Bord</h1>
+    <a href="{% url 'dashboard:vehicle_add' %}" class="btn btn-primary">Adaugă Vehicul Nou</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+  <h4 class="mb-0">Vehiculele Mele</h4>
+
+  <a href="{% url 'dashboard:export_maintenance_csv' %}" class="btn btn-sm btn-success">
+    Exportă Mentenanță (CSV)
+  </a>
+
+</div>
+    <div class="card-body">
+
+      {% if vehicle_list %}
+        <ul class="list-group">
+          {% for vehicle in vehicle_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{{ vehicle.make }} {{ vehicle.model }}</strong> ({{ vehicle.year }})
+                <br>
+                <small class="text-muted">{{ vehicle.license_plate }}</small>
+              </div>
+              <a href="{% url 'dashboard:vehicle_detail' pk=vehicle.pk %}" class="btn btn-sm btn-outline-secondary">Detalii</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="alert alert-info" role="alert">
+          Momentan nu ai niciun vehicul adăugat. 
+          <a href="{% url 'dashboard:vehicle_add' %}" class="alert-link">Adaugă primul tău vehicul</a> pentru a începe.
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

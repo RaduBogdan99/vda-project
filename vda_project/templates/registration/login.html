@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %} {% block title %}Login - Poli-Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title text-center">Autentificare</h2>
+
+        {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            Numele de utilizator sau parola sunt incorecte. Te rog încearcă din nou.
+          </div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <a href="{% url 'password_reset' %}">Ai uitat parola?</a> | <a href="{% url 'signup' %}">Creează un cont nou</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Pagina Principală - VDA{% endblock %}
+
+{% block content %}
+  <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+    <div class="container-fluid py-5">
+
+      {% if user.is_authenticated %}
+        <h1 class="display-5 fw-bold">Bun venit înapoi, {{ user.username }}!</h1>
+        <p class="col-md-8 fs-4">Gestionează-ți vehiculele, documentele și înregistrările de mentenanță.</p>
+
+        <hr>
+        <h4 class="mb-3">Atenționări Expirare (Următoarele 30 de zile)</h4>
+
+        {% if expiring_documents %}
+          <div class="card border-danger shadow-sm">
+            <div class="list-group list-group-flush">
+              {% for doc in expiring_documents %}
+                <div class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-danger">
+                      <strong>{{ doc.get_document_type_display }}</strong>
+                    </h5>
+                    <strong class="text-danger">
+                      Expiră în {{ doc.expiry_date|timeuntil:today }}
+                    </strong>
+                  </div>
+                  <p class="mb-0 text-muted">
+                    Pentru: {{ doc.vehicle.make }} {{ doc.vehicle.model }} ({{ doc.vehicle.license_plate }})
+                  </p>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Ești la zi!</h4>
+            <p>Niciun document nu expiră în următoarele 30 de zile.</p>
+          </div>
+        {% endif %}
+
+        <hr>
+        <h4 class="mb-3">Acțiuni Rapide</h4>
+        <a href="{% url 'dashboard:main' %}" class="btn btn-primary btn-lg me-2">Mergi la Dashboard</a>
+        <a href="{% url 'dashboard:vehicle_add' %}" class="btn btn-secondary btn-lg">Adaugă Vehicul Nou</a>
+
+      {% else %}
+        <h1 class="display-5 fw-bold">Bun venit la VDA!</h1>
+        <p class="col-md-8 fs-4">Asistentul tău digital pentru gestionarea vehiculelor.</p>
+        <hr>
+        <p>Ține evidența ITP-ului, RCA-ului, rovinietelor și a operațiunilor de service, totul într-un singur loc.</p>
+        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Creează un cont</a>
+        <a href="{% url 'login' %}" class="btn btn-secondary btn-lg">Autentifică-te</a>
+
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

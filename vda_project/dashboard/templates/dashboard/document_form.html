@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<title>{% if form.instance.pk %}Editează Document{% else %}Adaugă Document Nou{% endif %}</title>
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            {% if form.instance.pk %}Editează Document{% else %}Adaugă Document Nou{% endif %}
+          </h2>
+
+          <h5 class="card-subtitle mb-3 text-muted">
+            Pentru vehiculul: {{ vehicle.make }} {{ vehicle.model }}
+          </h5>
+          <hr>
+
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="d-flex justify-content-between mt-3">
+              <a href="{% url 'dashboard:vehicle_detail' pk=vehicle.pk %}" class="btn btn-outline-secondary">Anulează</a>
+
+              <button type="submit" class="btn btn-primary">
+                {% if form.instance.pk %}Salvează Modificările{% else %}Salvează Document{% endif %}
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

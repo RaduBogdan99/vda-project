@@ -1,10 +1,22 @@
 from django.contrib import admin
+from .models import Maintenance # <-- Numele corect este Maintenance
 
-from .models import MaintenanceRecord
+@admin.register(Maintenance) 
+class MaintenanceAdmin(admin.ModelAdmin):
+    # Ce coloane să afișăm în listă
+    list_display = (
+        'vehicle', 
+        'date', 
+        'odometer', 
+        'cost',
+        'notes'
+    )
 
+    # Filtre utile în dreapta
+    list_filter = ('date', 'vehicle__make')
 
-@admin.register(MaintenanceRecord)
-class MaintenanceRecordAdmin(admin.ModelAdmin):
-    list_display = ("vehicle", "service_type", "date", "odometer_km", "cost")
-    list_filter = ("service_type", "date")
-    search_fields = ("vehicle__make", "vehicle__model", "vehicle__vin")
+    # Căutare
+    search_fields = (
+        'vehicle__license_plate',
+        'notes'
+    )
