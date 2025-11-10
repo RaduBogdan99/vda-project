@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-<title>{% if form.instance.pk %}Editează Vehicul{% else %}Adaugă Vehicul Nou{% endif %}</title>
+<title>{% if form.instance.pk %}Editează Regulă{% else %}Adaugă Regulă Nouă{% endif %}</title>
 
 {% block content %}
   <div class="row justify-content-center">
@@ -10,8 +10,12 @@
         <div class="card-body">
 
           <h2 class="card-title">
-            {% if form.instance.pk %}Editează Vehicul{% else %}Adaugă un Vehicul Nou{% endif %}
+            {% if form.instance.pk %}Editează Regula de Alertă{% else %}Adaugă o Regulă de Alertă Nouă{% endif %}
           </h2>
+
+          <h5 class="card-subtitle mb-3 text-muted">
+            Pentru vehiculul: {{ vehicle.make }} {{ vehicle.model }}
+          </h5>
           <hr>
 
           <form method="post" novalidate>
@@ -19,14 +23,10 @@
             {{ form|crispy }}
 
             <div class="d-flex justify-content-between mt-3">
-              {% if form.instance.pk %}
-                <a href="{% url 'dashboard:vehicle_detail' pk=form.instance.pk %}" class="btn btn-outline-secondary">Anulează</a>
-              {% else %}
-                <a href="{% url 'dashboard:main' %}" class="btn btn-outline-secondary">Anulează</a>
-              {% endif %}
+              <a href="{% url 'dashboard:vehicle_detail' pk=vehicle.pk %}" class="btn btn-outline-secondary">Anulează</a>
 
               <button type="submit" class="btn btn-primary">
-                {% if form.instance.pk %}Salvează Modificările{% else %}Salvează Vehicul{% endif %}
+                {% if form.instance.pk %}Salvează Modificările{% else %}Salvează Regula{% endif %}
               </button>
             </div>
           </form>

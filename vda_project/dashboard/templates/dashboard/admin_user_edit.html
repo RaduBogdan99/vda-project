@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editează Utilizator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="card-title">Editezi profilul lui: {{ user_to_edit.username }}</h2>
+        <p>Modifică detaliile și permisiunile contului.</p>
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex justify-content-between mt-3">
+            <a href="{% url 'dashboard:admin_dashboard' %}" class="btn btn-outline-secondary">Anulează</a>
+            <button type="submit" class="btn btn-primary">Salvează Modificările</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

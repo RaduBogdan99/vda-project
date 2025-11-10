@@ -5,7 +5,9 @@
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h2">Tabloul Meu de Bord</h1>
-    <a href="{% url 'dashboard:vehicle_add' %}" class="btn btn-primary">Adaugă Vehicul Nou</a>
+    <a href="{% url 'dashboard:vehicle_add' %}" class="btn btn-primary">
+  <i class="bi bi-plus-lg"></i> Adaugă Vehicul Nou
+</a>
   </div>
 
   <div class="card shadow-sm">
@@ -13,7 +15,8 @@
   <h4 class="mb-0">Vehiculele Mele</h4>
 
   <a href="{% url 'dashboard:export_maintenance_csv' %}" class="btn btn-sm btn-success">
-    Exportă Mentenanță (CSV)
+  <i class="bi bi-download me-1"></i> Exportă Mentenanță (CSV)
+</a>
   </a>
 
 </div>
@@ -28,7 +31,9 @@
                 <br>
                 <small class="text-muted">{{ vehicle.license_plate }}</small>
               </div>
-              <a href="{% url 'dashboard:vehicle_detail' pk=vehicle.pk %}" class="btn btn-sm btn-outline-secondary">Detalii</a>
+              <a href="{% url 'dashboard:vehicle_detail' pk=vehicle.pk %}" class="btn btn-sm btn-outline-secondary">
+  <i class="bi bi-search me-1"></i> Detalii
+</a>
             </li>
           {% endfor %}
         </ul>

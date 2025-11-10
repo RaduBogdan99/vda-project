@@ -1,55 +1,110 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from .forms import CustomUserCreationForm # Pentru signup
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-# Importurile necesare pentru home_view (alerte)
+# Importuri pentru formularele de Autentificare
+from .forms import CustomUserCreationForm, UserProfileForm
+
+# Importuri pentru alertele din Home
 from documents.models import Document
+from maintenance.models import MaintenanceAlert
 from django.utils import timezone
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 
 def home_view(request):
-    # Inițializăm un context gol
     context = {}
 
-    # Verificăm dacă utilizatorul este logat
     if request.user.is_authenticated:
-        # 1. Definim perioada de căutare
         today = timezone.now().date()
-        alert_period = today + timedelta(days=30)
+        alert_period = today + timedelta(days=7)
 
-        # 2. Căutăm documentele care aparțin vehiculelor utilizatorului
-        #    ȘI care expiră între ziua de azi ȘI următoarele 30 de zile
-        expiring_documents = Document.objects.filter(
-            vehicle__owner=request.user,  # Doar ale utilizatorului
-            expiry_date__gte=today,       # Expiră de azi încolo
-            expiry_date__lte=alert_period # Până în 30 de zile
-        ).order_by('expiry_date') # Le ordonăm pe cele mai apropiate prima dată
+        # --- 1. Logica pentru ALERTE DOCUMENTE (MODIFICATĂ) ---
+        expiring_documents_qs = Document.objects.filter(
+            vehicle__owner=request.user,
+            expiry_date__lte=alert_period 
+        ).order_by('expiry_date')
 
-        # 3. Adăugăm documentele găsite și data de azi în context
-        context['expiring_documents'] = expiring_documents
-        context['today'] = today
+        expiring_documents_list = []
+        for doc in expiring_documents_qs:
+            days_remaining = (doc.expiry_date - today).days
+            expiring_documents_list.append({
+                'doc': doc,
+                'days_remaining': days_remaining,
+                'days_abs': abs(days_remaining)  # <-- AM ADĂUGAT VALOAREA ABSOLUTĂ AICI
+            })
 
-    # 4. Afișăm pagina HTML, trimițând datele (sau contextul gol dacă nu e logat)
+        context['expiring_documents'] = expiring_documents_list
+
+        # --- 2. Logica pentru ALERTE MENTENANȚĂ (Neschimbată) ---
+        due_maintenance = []
+        all_alerts = MaintenanceAlert.objects.filter(vehicle__owner=request.user)
+
+        for alert in all_alerts:
+            is_due = False
+            due_reason = ""
+
+            # Verifică alerta de KM
+            if alert.km_interval and alert.km_interval > 0:
+                due_km = alert.last_performed_odometer + alert.km_interval
+                km_remaining = due_km - alert.vehicle.current_odometer
+
+                if km_remaining <= 500: 
+                    is_due = True
+                    if km_remaining >= 0:
+                        due_reason = f"Mai sunt {km_remaining} km pana la revizie"
+                    else:
+                        due_reason = f"Revizie depasita cu {abs(km_remaining)} km!"
+
+            # Verifică alerta de Timp
+            if not is_due and alert.months_interval and alert.months_interval > 0:
+                due_date = alert.last_performed_date + relativedelta(months=alert.months_interval)
+                days_remaining_rel = (due_date - today).days
+
+                if days_remaining_rel <= 7:
+                    is_due = True
+                    if days_remaining_rel >= 0:
+                        due_reason = f"Revizie necesara in {days_remaining_rel} zile"
+                    else:
+                        due_reason = f"Revizie depasita cu {abs(days_remaining_rel)} zile!"
+
+            if is_due:
+                due_maintenance.append({'alert': alert, 'reason': due_reason})
+
+        context['due_maintenance'] = due_maintenance
+
     return render(request, 'home.html', context)
 
 
-# ACEASTA ESTE FUNCȚIA CARE LIPSEA:
+# --- FUNCȚIA CARE LIPSEA ---
 def signup_view(request):
-    # Verifică dacă formularul a fost trimis (metoda POST)
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            # Dacă formularul e valid, salvează utilizatorul în baza de date
             user = form.save()
-
-            # Loghează automat utilizatorul nou creat
             login(request, user)
-
-            # Redirecționează către pagina principală
             return redirect('home')
     else:
-        # Dacă e o cerere GET, afișează formularul gol
         form = CustomUserCreationForm()
 
     return render(request, 'registration/signup.html', {'form': form})
+
+
+# --- FUNCȚIA CARE LIPSEA ---
+@login_required
+def profile_settings_view(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profilul tău a fost actualizat cu succes!')
+            return redirect('profile_settings')
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'accounts/profile_settings.html', context)

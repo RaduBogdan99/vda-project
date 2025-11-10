@@ -17,3 +17,16 @@ class VehicleForm(forms.ModelForm):
             'license_plate': 'Număr înmatriculare',
             'vin': 'Serie șasiu (VIN)',
         }
+
+class VehicleOdometerForm(forms.ModelForm):
+    """
+    Un formular mic doar pentru actualizarea kilometrajului.
+    """
+    class Meta:
+        model = Vehicle
+        # Includem un singur câmp
+        fields = ['current_odometer']
+        # O etichetă (label) mai clară
+        labels = {
+            'current_odometer': 'Actualizează Kilometrajul Actual (km)'
+        }

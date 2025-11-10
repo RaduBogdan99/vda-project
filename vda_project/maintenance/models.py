@@ -50,3 +50,48 @@ class Maintenance(models.Model):
     class Meta:
         # Ordonăm de la cea mai recentă operațiune
         ordering = ['-date', '-odometer']
+
+
+class MaintenanceAlert(models.Model):
+    """
+    Stochează o regulă de mentenanță recurentă (ex: Schimb ulei la 10k km / 12 luni)
+    și când a fost efectuată ultima dată.
+    """
+    vehicle = models.ForeignKey(
+        Vehicle,
+        on_delete=models.CASCADE,
+        related_name='maintenance_alerts',
+        verbose_name="Vehicul"
+    )
+
+    description = models.CharField(
+        max_length=200, 
+        verbose_name="Descriere Operațiune",
+        help_text="Ex: Schimb ulei și filtru, Schimb distribuție"
+    )
+
+    # --- Intervale (oricare se atinge primul) ---
+    km_interval = models.PositiveIntegerField(
+        verbose_name="Interval Kilometri (km)",
+        null=True, blank=True, # Poate fi o alertă bazată doar pe timp
+        help_text="Ex: 10000"
+    )
+    months_interval = models.PositiveIntegerField(
+        verbose_name="Interval Timp (luni)",
+        null=True, blank=True, # Poate fi o alertă bazată doar pe km
+        help_text="Ex: 12"
+    )
+
+    # --- Când a fost efectuată ULTIMA DATĂ ---
+    last_performed_date = models.DateField(verbose_name="Data ultimei operațiuni")
+    last_performed_odometer = models.PositiveIntegerField(
+        verbose_name="Kilometrajul la ultima operațiune"
+    )
+
+    def __str__(self):
+        return f"Alertă: {self.description} pentru {self.vehicle.license_plate}"
+
+    # ACESTA ESTE BLOCUL CORECTAT
+    class Meta:
+        # Ordonăm după data ultimei operațiuni
+        ordering = ['-last_performed_date']
