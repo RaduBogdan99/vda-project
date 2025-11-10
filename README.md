@@ -65,13 +65,12 @@ Aplicația permite managementul complet pentru:
 
 ### 2. Clonarea Proiectului
 ```bash
-git clone https://[URL-UL-TAU-GITHUB-AICI]
-cd vda-project # sau numele folderului rădăcină
+git clone (https://github.com/RaduBogdan99/vda-project)
+cd vda-project
 
-# Creează mediul virtual
+
 python -m venv .venv
 
-# Activează mediul (PowerShell)
 .\.venv\Scripts\Activate.ps1
 
 pip install -r requirements.txt
