@@ -3,11 +3,13 @@ from .models import Maintenance
 from .serializers import MaintenanceSerializer
 from vehicles.models import Vehicle
 
+
 class MaintenanceViewSet(viewsets.ModelViewSet):
     """
     API endpoint care permite utilizatorilor să vadă sau să editeze
     propriile înregistrări de mentenanță.
     """
+
     serializer_class = MaintenanceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -25,5 +27,5 @@ class MaintenanceViewSet(viewsets.ModelViewSet):
         """
         serializer = super().get_serializer(*args, **kwargs)
         if self.request:
-            serializer.fields['vehicle'].queryset = Vehicle.objects.filter(owner=self.request.user)
+            serializer.fields["vehicle"].queryset = Vehicle.objects.filter(owner=self.request.user)
         return serializer

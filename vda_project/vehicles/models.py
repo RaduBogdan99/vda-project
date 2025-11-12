@@ -1,40 +1,39 @@
 from django.db import models
-from django.conf import settings # Ne trebuie pentru a ne lega de User
+from django.conf import settings  # Ne trebuie pentru a ne lega de User
+
 
 class Vehicle(models.Model):
     # --- Legătura cu Utilizatorul ---
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='vehicles'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="vehicles"
     )
 
     # --- Detalii Vehicul ---
-    make = models.CharField(max_length=100, verbose_name="Marcă") # ex: Volkswagen
-    model = models.CharField(max_length=100, verbose_name="Model") # ex: Golf
-    year = models.PositiveIntegerField(verbose_name="An fabricație") # ex: 2018
+    make = models.CharField(max_length=100, verbose_name="Marcă")  # ex: Volkswagen
+    model = models.CharField(max_length=100, verbose_name="Model")  # ex: Golf
+    year = models.PositiveIntegerField(verbose_name="An fabricație")  # ex: 2018
 
     license_plate = models.CharField(
-        max_length=20, 
+        max_length=20,
         verbose_name="Număr înmatriculare",
-        unique=True, # Previne adăugarea aceleiași mașini de două ori
+        unique=True,  # Previne adăugarea aceleiași mașini de două ori
         blank=True,  # Permite să fie gol dacă utilizatorul nu vrea să-l adauge
-        null=True
+        null=True,
     )
 
     # --- Informații Adiționale ---
     vin = models.CharField(
-        max_length=17, 
-        verbose_name="Serie șasiu (VIN)", 
-        blank=True, # blank=True înseamnă că nu e obligatoriu în formular
-        null=True
+        max_length=17,
+        verbose_name="Serie șasiu (VIN)",
+        blank=True,  # blank=True înseamnă că nu e obligatoriu în formular
+        null=True,
     )
 
     # --- CÂMPUL NOU ---
     current_odometer = models.PositiveIntegerField(
         verbose_name="Kilometraj Actual (km)",
         default=0,
-        help_text="Actualizează acest câmp periodic pentru a primi alerte de mentenanță."
+        help_text="Actualizează acest câmp periodic pentru a primi alerte de mentenanță.",
     )
 
     # Adăugăm datele de creare/modificare pentru o bună trasabilitate
@@ -48,6 +47,6 @@ class Vehicle(models.Model):
 
     class Meta:
         # Setează cum să fie ordonate vehiculele când le cerem din baza de date
-        ordering = ['-created_at'] # Cele mai noi prima dată
+        ordering = ["-created_at"]  # Cele mai noi prima dată
         # Asigură că un user nu poate adăuga 2 mașini cu același număr de înmatriculare
-        unique_together = ('owner', 'license_plate')
+        unique_together = ("owner", "license_plate")

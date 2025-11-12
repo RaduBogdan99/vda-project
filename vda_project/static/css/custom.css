@@ -1,32 +1,20 @@
 body {
-  /* Setează un fundal negru ca rezervă */
-  background-color: #000;
 
-  /* Adaugă imaginea de fundal */
-  /* Am ales o imagine de bord întunecat de pe Pexels (gratuit) */
+  background-color: #000;
   background-image: 
-    /* 1. Acesta este un "overlay" negru (70% opac) */
+
     linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    /* 2. Aceasta este imaginea propriu-zisă */
+
     url('https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/46f37945885079.584030cfd603d.gif');
 
-  /* Asigură-te că imaginea acoperă tot ecranul */
   background-size: cover;
-
-  /* Centrează imaginea */
   background-position: center center;
-
-  /* Oprește repetarea imaginii */
   background-repeat: no-repeat;
-
-  /* Oprește imaginea din a defila (creează un efect "parallax") */
   background-attachment: fixed;
 }
 
-/* DEFINIȚIA ANIMAȚIEI DE FADE-IN (existentă) */
 @keyframes fadeIn {
-/* ... restul codului tău ... */
-/* Definirea animației de fade-in (existentă) */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -38,35 +26,24 @@ body {
   }
 }
 
-/* Aplicarea animației de fade-in (existentă) */
+
 main.container {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* * ==================================================
- * === NOUL COD PENTRU DARK MODE ȘI ANIMAȚII ===
- * ==================================================
-*/
-
-/* 1. Forțează cardurile să fie întunecate */
-/* Când folosim [data-bs-theme="dark"], facem cardurile transparente */
-/* și lăsăm fundalul negru al body-ului să se vadă. */
 [data-bs-theme="dark"] .card {
-  background-color: transparent; /* Elimină fundalul alb al cardului */
-  border: 1px solid #495057; /* Adaugă o margine subtilă gri */
+  background-color: transparent;
+  border: 1px solid #495057;
 }
 
-/* * 2. Animație de "puls" pentru butoane 
- * Se va aplica doar butoanelor cu clasa .btn-pulse
-*/
 @keyframes pulse {
   0% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
   }
   70% {
-    transform: scale(1.05); /* Mărește puțin butonul */
-    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); /* Creează efectul de "undă" */
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
   }
   100% {
     transform: scale(1);
@@ -74,12 +51,11 @@ main.container {
   }
 }
 
-/* Clasa pe care o vom adăuga la butoane */
+
 .btn-pulse {
-  animation: pulse 2s infinite; /* Rulează animația la infinit */
+  animation: pulse 2s infinite;
 }
 
-/* Efectul de hover (existent) */
 .btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);

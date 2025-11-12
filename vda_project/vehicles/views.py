@@ -1,14 +1,15 @@
-
 # Create your views here.
 from rest_framework import viewsets, permissions
 from .models import Vehicle
 from .serializers import VehicleSerializer
+
 
 class VehicleViewSet(viewsets.ModelViewSet):
     """
     API endpoint care permite utilizatorilor să vadă sau să editeze
     propriile vehicule.
     """
+
     serializer_class = VehicleSerializer
     # API-ul va fi accesibil doar utilizatorilor logați
     permission_classes = [permissions.IsAuthenticated]

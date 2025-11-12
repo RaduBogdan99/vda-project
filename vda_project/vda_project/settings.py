@@ -11,14 +11,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+
 # LINIA ACEASTA TREBUIE MODIFICATĂ:
-from decouple import Config, RepositoryEnv 
+from decouple import Config, RepositoryEnv
 
 # Construim calea către folderul rădăcină (cel cu manage.py)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Construim calea către fișierul .env
-ENV_PATH = BASE_DIR / 'vda_project' / '.env'
+ENV_PATH = BASE_DIR / "vda_project" / ".env"
 
 # Încărcăm configurația din acel fișier specific
 config = Config(RepositoryEnv(str(ENV_PATH)))
@@ -54,13 +55,13 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587                     
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_USER')        # Citește din fișierul .env
-EMAIL_HOST_PASSWORD = config('EMAIL_PASS')    # Citește din fișierul .env
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER      # Setează email-ul implicit
+EMAIL_HOST_USER = config("EMAIL_USER")  # Citește din fișierul .env
+EMAIL_HOST_PASSWORD = config("EMAIL_PASS")  # Citește din fișierul .env
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Setează email-ul implicit
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -76,7 +77,7 @@ ROOT_URLCONF = "vda_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -138,10 +139,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Default primary key field type
@@ -152,17 +153,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-LOGIN_REDIRECT_URL = 'home'   # Numele URL-ului de la pagina principală
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = "home"  # Numele URL-ului de la pagina principală
+LOGOUT_REDIRECT_URL = "home"
 
 REST_FRAMEWORK = {
     # Folosim drf-spectacular ca schemă implicită pentru API
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # Setări pentru drf-spectacular (Documentație)
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'VDA - Vehicle & Driver Assistant API',
-    'DESCRIPTION': 'Documentația API pentru proiectul VDA',
-    'VERSION': '1.0.0',
+    "TITLE": "VDA - Vehicle & Driver Assistant API",
+    "DESCRIPTION": "Documentația API pentru proiectul VDA",
+    "VERSION": "1.0.0",
 }

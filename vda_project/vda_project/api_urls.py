@@ -7,8 +7,8 @@ from maintenance.views import MaintenanceViewSet
 router = DefaultRouter()
 
 # Înregistrăm toate ViewSet-urile noastre
-router.register(r'vehicles', VehicleViewSet, basename='vehicle')
-router.register(r'documents', DocumentViewSet, basename='document')
-router.register(r'maintenance', MaintenanceViewSet, basename='maintenance')
+router.register(r"vehicles", VehicleViewSet, basename="vehicle")
+router.register(r"documents", DocumentViewSet, basename="document")
+router.register(r"maintenance", MaintenanceViewSet, basename="maintenance")
 
 urlpatterns = router.urls
