@@ -12,17 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-# LINIA ACEASTA TREBUIE MODIFICATĂ:
-from decouple import Config, RepositoryEnv
-
 # Construim calea către folderul rădăcină (cel cu manage.py)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Construim calea către fișierul .env
-ENV_PATH = BASE_DIR / "vda_project" / ".env"
-
-# Încărcăm configurația din acel fișier specific
-config = Config(RepositoryEnv(str(ENV_PATH)))
+from decouple import config
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -59,8 +52,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("EMAIL_USER")  # Citește din fișierul .env
-EMAIL_HOST_PASSWORD = config("EMAIL_PASS")  # Citește din fișierul .env
+EMAIL_HOST_USER = config("EMAIL_USER", default="test-ci@example.com")  # Citește din fișierul .env
+EMAIL_HOST_PASSWORD = config("EMAIL_PASS", default="test-ci-password")  # Citește din fișierul .env
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Setează email-ul implicit
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
