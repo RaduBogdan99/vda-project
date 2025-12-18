@@ -1,119 +1,83 @@
-# 🚗 VDA - Vehicle & Driver Assistant
+# VDA - Vehicle & Driver Assistant
 
-**VDA (Vehicle & Driver Assistant)** este o aplicație web construită în Django, concepută pentru a ajuta șoferii să își gestioneze vehiculele, documentele cu dată de expirare (RCA, ITP, Rovinietă) și istoricul de mentenanță.
-
-Aplicația oferă o interfață prietenoasă, un API RESTful pentru extinderi viitoare și un sistem automat de notificări prin e-mail pentru alertele de expirare.
-
-Acest proiect a fost dezvoltat ca parte a disciplinei "Instrumente pentru Dezvoltarea Programelor", cu un accent deosebit pe **trasabilitatea** proiectului folosind un ciclu de viață modern de dezvoltare software (Git, GitHub Issues, Pull Requests, CI/CD).
-
----
+**Vehicle & Driver Assistant (VDA)** este o aplicație web full-stack dezvoltată pentru gestionarea completă a ciclului de viață al vehiculelor personale. Aplicația permite utilizatorilor să monitorizeze documentele (RCA, ITP, Rovinietă), să țină evidența istoricului de mentenanță și să primească alerte automate înainte de expirarea documentelor sau depășirea intervalelor de service.
 
 ## 🚀 Funcționalități Principale
 
-### 1. Managementul Utilizatorilor
-* Sistem complet de autentificare (Înregistrare, Login, Logout).
-* Funcționalitate de "Resetare Parolă" prin e-mail.
-* Paginile sunt securizate (utilizatorii nu pot vedea sau modifica datele altor utilizatori).
+* **Management Vehicule:** Adăugare, editare și vizualizare detalii vehicule (VIN, an fabricație, kilometraj curent).
+* **Gestiune Documente:** Urmărirea valabilității documentelor (RCA, ITP, CASCO) cu highlight vizual pentru cele expirate.
+* **Jurnal Service:** Înregistrarea costurilor și a operațiunilor de mentenanță (ex: schimb ulei, plăcuțe frână).
+* **Alerte Inteligente:** Sistem de notificări bazat pe timp (zile rămase) și kilometraj.
+* **Automatizare:** Trimiterea automată a alertelor prin e-mail folosind scripturi personalizate (Management Commands) și Task Scheduler.
+* **API RESTful:** Expunerea datelor pentru integrări externe, documentat prin Swagger/OpenAPI.
+* **Panou Administrare:** Interfață dedicată administratorilor pentru gestionarea utilizatorilor.
 
-### 2. Dashboard & Alerte
-* O pagină principală (Home) care afișează un sumar al documentelor care expiră în următoarele 30 de zile.
-* Un Dashboard central unde utilizatorii își pot vedea toate vehiculele.
+## 🛠️ Tehnologii Utilizate
 
-### 3. CRUD (Create, Read, Update, Delete)
-Aplicația permite managementul complet pentru:
-* **Vehicule:** Adăugare, editare și ștergere a vehiculelor personale.
-* **Documente:** Adăugarea, editarea și ștergerea documentelor (RCA, ITP etc.) pentru fiecare vehicul, inclusiv încărcarea de atașamente (PDF/imagini).
-* **Mentenanță:** Adăugarea, editarea și ștergerea înregistrărilor de service (cost, kilometraj, notițe).
-
-### 4. Notificări Automate
-* Un script (`management command`) care rulează automat (printr-un cron job / Task Scheduler).
-* Scriptul scanează baza de date și trimite e-mail-uri de avertizare utilizatorilor ale căror documente urmează să expire.
-
-### 5. API RESTful
-* Un API securizat (necesită autentificare) care expune datele în format JSON.
-* Endpoint-uri complete pentru CRUD pe Vehicule, Documente și Mentenanță.
-* Documentație API generată automat folosind **Swagger (OpenAPI)**.
-
-### 6. Export de Date
-* Funcționalitate de export a tuturor înregistrărilor de mentenanță într-un fișier `.csv` pentru analiză în Excel.
+* **Backend:** Python 3.12, Django 5.2
+* **API:** Django REST Framework (DRF), drf-spectacular
+* **Frontend:** HTML5, Bootstrap 5, Django Crispy Forms
+* **Bază de date:** SQLite (Default pentru dezvoltare)
+* **Calitate Cod (CI/CD):** Black (formatter), Ruff (linter), Pytest (testing)
+* **Securitate:** Python-Decouple (pentru gestionarea variabilelor de mediu)
 
 ---
 
-## 🛠️ Tehnologii și Instrumente Folosite
+## ⚙️ Instalare și Configurare Locală
 
-| Categorie | Tehnologie/Instrument | Rol |
-| :--- | :--- | :--- |
-| **Backend** | **Python 3.11+**, **Django** | Logica aplicației, ORM, autentificare, admin. |
-| **API** | **Django REST Framework (DRF)** | Crearea API-ului RESTful. |
-| **Frontend** | **Django Templates**, **Bootstrap 5** | Construirea interfeței utilizatorului. |
-| **Formulare** | **django-crispy-forms** | Stilizarea rapidă a formularelor cu Bootstrap. |
-| **Bază de Date** | **SQLite** | Bază de date ușoară pentru dezvoltare. |
-| **Notificări** | **Django Management Commands**, **Task Scheduler** | Rularea script-urilor automate de alerte. |
-| **Configurare** | **python-decouple** | Gestionarea securizată a secretelor (parole, chei API). |
-| **Documentație API**| **drf-spectacular** | Generarea automată a paginii Swagger UI. |
-| **CI/CD** | **GitHub Actions** | Automatizarea testării și linting-ului. |
-| **Calitatea Codului**| **Black**, **Ruff** | Formatare de cod și identificarea erorilor. |
-| **Testare** | **Pytest** | Rularea testelor unitare. |
+Urmează pașii de mai jos pentru a rula proiectul pe mașina locală.
 
----
+### 1. Clonare repository
 
-## 🏁 Cum se Rulează Local
-
-### 1. Cerințe preliminare
-* Python 3.11+
-* Git
-
-### 2. Clonarea Proiectului
 ```bash
-git clone (https://github.com/RaduBogdan99/vda-project)
+git clone [https://github.com/RaduBogdan99/vda-project.git](https://github.com/RaduBogdan99/vda-project.git)
 cd vda-project
-
-
+# Windows
 python -m venv .venv
-
 .\.venv\Scripts\Activate.ps1
+
+# Linux / macOS
+python3 -m venv .venv
+source .venv/bin/activate
 
 pip install -r requirements.txt
 
-(Asigură-te că ai python-decouple, djangorestframework, drf-spectacular, django-crispy-forms, crispy-bootstrap5 în fișierul requirements.txt)
-
-5. Configurarea Mediului (.env)
-
-    Mergi la folderul de configurare: cd vda_project
-
-    Creează un fișier numit .env.
-
-    Adaugă cheile pentru serverul de e-mail (ex: Gmail):
-    Ini, TOML
-
-    EMAIL_USER=adresa-ta-de-test@gmail.com
-    EMAIL_PASS=parola-ta-de-aplicatie-de-16-caractere
-
-6. Migrarea Bazei de Date
-
-Întoarce-te la folderul manage.py (cd ..) și rulează:
-Bash
+# Configurare Email (SMTP Gmail)
+EMAIL_USER=adresa.ta@gmail.com
+EMAIL_PASS=parola_ta_de_aplicatie_16_caractere
 
 python manage.py migrate
 
-7. Crearea unui Super-Utilizator (Admin)
-
-Bash
-
 python manage.py createsuperuser
-
-(Urmează instrucțiunile pentru a seta un nume de utilizator și o parolă)
-
-8. Rularea Serverului
-
-Bash
 
 python manage.py runserver
 
-Aplicația este acum disponibilă la http://127.0.0.1:8000/.
+Accesează aplicația în browser:
 
- Documentație API
+    Homepage: http://127.0.0.1:8000/
 
-Documentația API (Swagger UI) este generată automat și este disponibilă (după pornirea serverului) la adresa:
+    Documentație API (Swagger UI): http://127.0.0.1:8000/api/docs/
 
-http://127.0.0.1:8000/api/docs/
+    Schema API (YAML): http://127.0.0.1:8000/api/schema/
+
+🤖 Automatizare și Scripturi
+
+Aplicația include un script personalizat pentru verificarea alertelor și trimiterea email-urilor.
+
+Rulare manuală a scriptului:
+
+python manage.py send_expiry_alerts
+
+Acest script este configurat să ruleze automat în Windows Task Scheduler pentru a verifica zilnic statusul documentelor și al reviziilor.
+✅ Testare și Code Quality
+
+Proiectul folosește GitHub Actions pentru Integrare Continuă (CI). Pentru a rula verificările local:
+
+# Formatare cod
+black .
+
+# Verificare erori (linting)
+ruff check .
+
+# Rulare teste unitare
+pytest
